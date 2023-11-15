@@ -3,6 +3,7 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 import logging
 import random
+from pathlib import Path
 
 BOT_TOKEN = '6321549390:AAEaMuJjFFLBaKYWXjlI27Frm1kHVNThTck'
 bot = Bot(token=BOT_TOKEN)
@@ -26,14 +27,14 @@ async def myinfo(message: types.Message):
 
 @dp.message(Command("pic"))
 async def pic(message: types.Message):
-    file = types.FSInputFile("images/dog.jpg")
-    file2 = types.FSInputFile("images/eagle.jpg")
-    file3 = types.FSInputFile("images/wolf.jpg")
-    random_image = random.choice([file, file2, file3])
+    image_directory = Path("images")
+    image_files = list(image_directory.iterdir())
+    random_image = random.choice(image_files)
+    file = types.FSInputFile(random_image)
+
 
     await message.answer_photo(
-        photo=random_image,
-        caption="Собака, Орел, Волк"
+        photo=file
     )
 
 
