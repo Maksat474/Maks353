@@ -1,45 +1,30 @@
+from aiogram.types import BotCommand
 import asyncio
-from aiogram import Bot, Dispatcher, types
-from aiogram.filters import Command
 import logging
-import random
-from pathlib import Path
-
-BOT_TOKEN = '6321549390:AAEaMuJjFFLBaKYWXjlI27Frm1kHVNThTck'
-bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher()
-
-
-@dp.message(Command("start"))
-async def start(message: types.Message):
-    await message.answer(f"Hi {message.from_user.first_name}")
-
-
-@dp.message(Command('myinfo'))
-async def myinfo(message: types.Message):
-    user_info = (
-        f"Ваш id: {message.from_user.id}\n"
-        f"Имя: {message.from_user.first_name}\n"
-        f"Username: @{message.from_user.username}"
-    )
-    await message.answer(user_info)
-
-
-@dp.message(Command("pic"))
-async def pic(message: types.Message):
-    image_directory = Path("images")
-    image_files = list(image_directory.iterdir())
-    random_image = random.choice(image_files)
-    file = types.FSInputFile(random_image)
-
-
-    await message.answer_photo(
-        photo=file
-    )
+from bot import dp, bot
+from handlers import (
+    start_router,
+    myinfo_router,
+    picture_router,
+    echo_router,
+    shop_router
+)
 
 
 
 async def main():
+    await bot.set_my_commands([
+        BotCommand(command="start", description="начало"),
+        BotCommand(command="myinfo", description="информация обо мне"),
+        BotCommand(command="pic", description="показать картинку"),
+        BotCommand(command="shop", description="магазин"),
+        BotCommand(command="echo", description="эхо")
+    ])
+    dp.include_router(start_router)
+    dp.include_router(myinfo_router)
+    dp.include_router(picture_router)
+    dp.include_router(shop_router)
+    dp.include_router(echo_router)
     await dp.start_polling(bot)
 
 
