@@ -7,9 +7,9 @@ from handlers import (
     myinfo_router,
     picture_router,
     echo_router,
-    shop_router
+    shop_router,
+    questions_router
 )
-
 
 
 async def main():
@@ -18,12 +18,14 @@ async def main():
         BotCommand(command="myinfo", description="информация обо мне"),
         BotCommand(command="pic", description="показать картинку"),
         BotCommand(command="shop", description="магазин"),
+        BotCommand(command="quest", description="опросник"),
         BotCommand(command="echo", description="эхо")
     ])
     dp.include_router(start_router)
     dp.include_router(myinfo_router)
     dp.include_router(picture_router)
     dp.include_router(shop_router)
+    dp.include_router(questions_router)
     dp.include_router(echo_router)
     await dp.start_polling(bot)
 
