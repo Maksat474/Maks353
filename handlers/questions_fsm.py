@@ -58,7 +58,8 @@ async def process_age(message: types.Message, state: FSMContext):
             ]
         )
         await state.set_state(Questionaire.gender)
-        await message.answer("Ваш пол?")
+        await message.answer("Ваш пол?",
+                             reply_markup=kb)
 
 
 @questions_router.message(F.text, Questionaire.gender)
@@ -88,7 +89,8 @@ async def process_occupation(message: types.Message, state: FSMContext):
         ]
     )
     await state.set_state(Questionaire.education)
-    await message.answer("ваше образование?")
+    await message.answer("ваше образование?",
+                         reply_markup=kb)
 
 
 @questions_router.message(F.text, Questionaire.education)
