@@ -42,7 +42,7 @@ async def process_name(message: types.Message, state: FSMContext):
 @questions_router.message(F.text, Questionaire.age)
 async def process_age(message: types.Message, state: FSMContext):
     age = message.text
-    if not age.isdigit.strip():
+    if not age.isdigit():
         await message.answer("Возраст должен быть числом!")
     elif int(age) < 12 or int(age) > 100:
         await message.answer("Возраст должен быть от 12 до 100")

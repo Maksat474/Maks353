@@ -10,6 +10,14 @@ from handlers import (
     shop_router,
     questions_router
 )
+from db.queries import init_db, create_tables, populate_tables,  get_all_products
+
+
+async def on_startup(dispatcher):
+    logging.info("Connecting to the database")
+    init_db()
+    create_tables()
+    populate_tables()
 
 
 async def main():
@@ -26,6 +34,7 @@ async def main():
     dp.include_router(picture_router)
     dp.include_router(shop_router)
     dp.include_router(questions_router)
+    dp.startup.register(on_startup)
     dp.include_router(echo_router)
     await dp.start_polling(bot)
 

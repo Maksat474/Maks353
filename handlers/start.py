@@ -8,11 +8,11 @@ start_router = Router()
 async def start(message: types.Message):
     kb = types.InlineKeyboardMarkup(
         inline_keyboard=[
-            {
+            [
                 types.InlineKeyboardButton(
                     text="Наш сайт", url="http://books.kg/"
                 )
-            },
+            ],
             [
                 types.InlineKeyboardButton(
                     text="Адрес", callback_data="address"
