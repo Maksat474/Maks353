@@ -10,11 +10,10 @@ from handlers import (
     shop_router,
     questions_router
 )
-from db.queries import init_db, create_tables, populate_tables,  get_all_products
+from db.queries import init_db, create_tables, populate_tables
 
 
 async def on_startup(dispatcher):
-    logging.info("Connecting to the database")
     init_db()
     create_tables()
     populate_tables()

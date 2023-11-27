@@ -7,6 +7,8 @@ def init_db():
     global db, cursor
     db = sqlite3.connect("db.sqlite3")
     cursor = db.cursor()
+    global all_products
+    all_products = get_all_products()
 
 
 def create_tables():
@@ -41,13 +43,16 @@ def populate_tables():
 
 
 def get_all_products():
+    conn = sqlite3.connect("db.sqlite3")
+    cursor = conn.cursor()
     cursor.execute(
         """
         SELECT * FROM products
         """
     )
-    return cursor.fetchall()
-
+    products = cursor.fetchall()
+    conn.close()
+    return products
 
 if __name__ == "__main__":
     init_db()
