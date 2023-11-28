@@ -35,7 +35,8 @@ def create_tables():
             name TEXT,
             price DECIMAL,
             image TEXT,
-            category_id INTEGER 
+            category_id INTEGER,
+            FOREIGN KEY (category_id) REFERENCES category (id)
         )
         """
     )
@@ -46,7 +47,7 @@ def populate_tables():
     cursor.execute(
         """
         INSERT INTO category (name) VALUES
-        ("Книги"), ("Комиксы"), ("Журналы")
+        ("Книги"), ("Комиксы"), ("Сувениры")
         """
     )
     cursor.execute(
@@ -54,7 +55,9 @@ def populate_tables():
         INSERT INTO products (name, price, image, category_id) VALUES 
         ('Подсознание может все ', 560.00, 'images/book1.jpg', 1),
         ('Собор Парижской Богоматери', 210.00, 'images/book2.jpg', 1),
-        ('Продавец обуви. История компании NIKE', 990.00, 'images/book3.jpg', 1)
+        ('Продавец обуви. История компании NIKE', 990.00, 'images/book3.jpg', 1),
+        ('ЭНЦИКЛОПЕДИЯ MARVEL. ХРОНИКИ. ГОД ЗА ГОДОМ', 1990.00, 'images/comics.jpg', 2),
+        ('Закладки для книг', 25.00, 'images/souvenirs.jpg', 3)
         """
     )
     db.commit()
@@ -75,7 +78,6 @@ def get_product_by_category_id(category_id: int):
         SELECT * FROM products WHERE category_id = :cat_id
         """, {"cat_id": category_id}
     )
-
     return cursor.fetchall()
 
 
@@ -84,4 +86,4 @@ if __name__ == "__main__":
     create_tables()
     populate_tables()
     # pprint(get_all_products())
-    pprint(get_product_by_category_id(1))
+    pprint(get_product_by_category_id(2))
