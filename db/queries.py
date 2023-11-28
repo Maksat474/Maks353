@@ -46,7 +46,7 @@ def populate_tables():
     cursor.execute(
         """
         INSERT INTO category (name) VALUES
-        ('Книги'), ("Комиксы"), ("Журналы")
+        ("Книги"), ("Комиксы"), ("Журналы")
         """
     )
     cursor.execute(
@@ -63,22 +63,25 @@ def populate_tables():
 def get_all_products():
     cursor.execute(
         """
-        SELECT * FROM products
+        SELECT * FROM products 
         """
     )
     return cursor.fetchall()
 
-def get_products_with_category():
+
+def get_product_by_category_id(category_id: int):
     cursor.execute(
         """
-        SELECT p.name, c.name FROM products AS p JOIN category AS c ON p.category_id = c.id
-        """
+        SELECT * FROM products WHERE category_id = :cat_id
+        """, {"cat_id": category_id}
     )
+
     return cursor.fetchall()
+
 
 if __name__ == "__main__":
     init_db()
     create_tables()
     populate_tables()
-    pprint(get_all_products())
-    pprint(get_products_with_category())
+    # pprint(get_all_products())
+    pprint(get_product_by_category_id(1))

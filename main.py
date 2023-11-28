@@ -33,6 +33,7 @@ async def main():
     dp.include_router(picture_router)
     dp.include_router(shop_router)
     dp.include_router(questions_router)
+
     dp.startup.register(on_startup)
     dp.include_router(echo_router)
     await dp.start_polling(bot)
