@@ -22,6 +22,20 @@ def create_tables():
     )
     cursor.execute(
         """
+        CREATE TABLE IF NOT EXISTS Questionaire(
+            name TEXT,
+            age INTEGER,
+            gender TEXT,
+            occupation TEXT,
+            education TEXT,
+            favorite_genre_of_literature TEXT,
+            favorite_autor TEXT,
+            favorite_piece TEXT
+        )
+        """
+    )
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS category (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT
@@ -81,9 +95,31 @@ def get_product_by_category_id(category_id: int):
     return cursor.fetchall()
 
 
+def save_questionaire(data):
+    print(data)
+    cursor.execute(
+        """
+        INSERT INTO Questionaire(n, age, gender, occupation, education, 
+        favorite_genre_of_literature, favorite_autor, favorite_piece)
+        VALUES (:n, :age, :gender, :occ, :education,
+        :favorite_genre_of_literature, :favorite_autor, :favorite_piece)
+        """, {
+            "n": data["name"],
+            "age": data["age"],
+            "gender": data["gender"],
+            "occupation": data["occupation"],
+            "education": data["education"],
+            "favorite_genre_of_literature": data["favorite_genre_of_literature"],
+            "favorite_autor": data["favorite_autor"],
+            "favorite_piece": data["favorite_piece"],
+        }
+    )
+    db.commit()
+
+
 if __name__ == "__main__":
     init_db()
     create_tables()
     populate_tables()
     # pprint(get_all_products())
-    pprint(get_product_by_category_id(2))
+    pprint(get_product_by_category_id(1))

@@ -3,6 +3,8 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 
+from db.queries import save_questionaire
+
 questions_router = Router()
 
 
@@ -72,25 +74,8 @@ async def process_gender(message: types.Message, state: FSMContext):
 @questions_router.message(F.text, Questionaire.occupation)
 async def process_occupation(message: types.Message, state: FSMContext):
     await state.update_data(oсcupation=message.text)
-    kb = types.ReplyKeyboardMarkup(
-        keyboard=[
-            [
-                types.KeyboardButton(text="Учеба")
-            ],
-            [
-                types.KeyboardButton(text="Работа")
-            ],
-            [
-                types.KeyboardButton(text="Бизнес")
-            ],
-            [
-                types.KeyboardButton(text="Другое")
-            ]
-        ]
-    )
     await state.set_state(Questionaire.education)
-    await message.answer("ваше образование?",
-                         reply_markup=kb)
+    await message.answer("ваше образование?")
 
 
 @questions_router.message(F.text, Questionaire.education)
@@ -120,7 +105,8 @@ async def process_favorite_piece(message: types.Message, state: FSMContext):
 
     # save to DB
     data = await state.get_data()
-    print(data)
+    save_questionaire(data)
+    # print(data)
     # clear state
     await state.clear()
     await message.answer("Спасибо, что прошли опросник!")
