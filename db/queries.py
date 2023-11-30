@@ -99,20 +99,11 @@ def save_questionaire(data):
     print(data)
     cursor.execute(
         """
-        INSERT INTO Questionaire(n, age, gender, occupation, education, 
+        INSERT INTO Questionaire(name, age, gender, occupation, education, 
         favorite_genre_of_literature, favorite_autor, favorite_piece)
-        VALUES (:n, :age, :gender, :occ, :education,
+        VALUES (:name, :age, :gender, :occupation, :education,
         :favorite_genre_of_literature, :favorite_autor, :favorite_piece)
-        """, {
-            "n": data["name"],
-            "age": data["age"],
-            "gender": data["gender"],
-            "occupation": data["occupation"],
-            "education": data["education"],
-            "favorite_genre_of_literature": data["favorite_genre_of_literature"],
-            "favorite_autor": data["favorite_autor"],
-            "favorite_piece": data["favorite_piece"],
-        }
+        """, data
     )
     db.commit()
 

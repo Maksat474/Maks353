@@ -73,7 +73,7 @@ async def process_gender(message: types.Message, state: FSMContext):
 
 @questions_router.message(F.text, Questionaire.occupation)
 async def process_occupation(message: types.Message, state: FSMContext):
-    await state.update_data(oсcupation=message.text)
+    await state.update_data(occupation=message.text)
     await state.set_state(Questionaire.education)
     await message.answer("ваше образование?")
 
