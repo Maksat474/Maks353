@@ -36,6 +36,7 @@ async def start_questions(message: types.Message, state: FSMContext):
 
 @questions_router.message(F.text, Questionnaire.name)
 async def process_name(message: types.Message, state: FSMContext):
+    await state.update_data(chat_id=message.from_user.id)
     await state.update_data(name=message.text)
     await state.set_state(Questionnaire.age)
     await message.answer("Какой у вас возраст?")
