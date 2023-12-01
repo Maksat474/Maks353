@@ -3,12 +3,12 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 
-from db.queries import save_questionaire
+from db.queries import save_questionnaire
 
 questions_router = Router()
 
 
-class Questionaire(StatesGroup):
+class Questionnaire(StatesGroup):
     name = State()
     age = State()
     gender = State()
@@ -29,19 +29,19 @@ async def stop_questions(message: types.Message, state: FSMContext):
 
 @questions_router.message(Command("quest"))
 async def start_questions(message: types.Message, state: FSMContext):
-    await state.set_state(Questionaire.name)
+    await state.set_state(Questionnaire.name)
     await message.answer("Для выхода введите 'stop")
     await message.answer("Как вас зовут?")
 
 
-@questions_router.message(F.text, Questionaire.name)
+@questions_router.message(F.text, Questionnaire.name)
 async def process_name(message: types.Message, state: FSMContext):
     await state.update_data(name=message.text)
-    await state.set_state(Questionaire.age)
+    await state.set_state(Questionnaire.age)
     await message.answer("Какой у вас возраст?")
 
 
-@questions_router.message(F.text, Questionaire.age)
+@questions_router.message(F.text, Questionnaire.age)
 async def process_age(message: types.Message, state: FSMContext):
     age = message.text
     if not age.isdigit():
@@ -59,53 +59,53 @@ async def process_age(message: types.Message, state: FSMContext):
                 ]
             ]
         )
-        await state.set_state(Questionaire.gender)
+        await state.set_state(Questionnaire.gender)
         await message.answer("Ваш пол?",
                              reply_markup=kb)
 
 
-@questions_router.message(F.text, Questionaire.gender)
+@questions_router.message(F.text, Questionnaire.gender)
 async def process_gender(message: types.Message, state: FSMContext):
     await state.update_data(gender=message.text)
-    await state.set_state(Questionaire.occupation)
+    await state.set_state(Questionnaire.occupation)
     await message.answer("ваш род деятельности?")
 
 
-@questions_router.message(F.text, Questionaire.occupation)
+@questions_router.message(F.text, Questionnaire.occupation)
 async def process_occupation(message: types.Message, state: FSMContext):
     await state.update_data(occupation=message.text)
-    await state.set_state(Questionaire.education)
+    await state.set_state(Questionnaire.education)
     await message.answer("ваше образование?")
 
 
-@questions_router.message(F.text, Questionaire.education)
+@questions_router.message(F.text, Questionnaire.education)
 async def process_education(message: types.Message, state: FSMContext):
     await state.update_data(education=message.text)
-    await state.set_state(Questionaire.favorite_genre_of_literature)
+    await state.set_state(Questionnaire.favorite_genre_of_literature)
     await message.answer("Ваш любимый жанр литературы?")
 
 
-@questions_router.message(F.text, Questionaire.favorite_genre_of_literature)
+@questions_router.message(F.text, Questionnaire.favorite_genre_of_literature)
 async def process_favorite_genre_of_literature(message: types.Message, state: FSMContext):
     await state.update_data(favorite_genre_of_literature=message.text)
-    await state.set_state(Questionaire.favorite_autor)
+    await state.set_state(Questionnaire.favorite_autor)
     await message.answer("Ваш любимый автор?")
 
 
-@questions_router.message(F.text, Questionaire.favorite_autor)
+@questions_router.message(F.text, Questionnaire.favorite_autor)
 async def process_favorite_autor(message: types.Message, state: FSMContext):
     await state.update_data(favorite_autor=message.text)
-    await state.set_state(Questionaire.favorite_piece)
+    await state.set_state(Questionnaire.favorite_piece)
     await message.answer("Ваше любимое произведение?")
 
 
-@questions_router.message(F.text, Questionaire.favorite_piece)
+@questions_router.message(F.text, Questionnaire.favorite_piece)
 async def process_favorite_piece(message: types.Message, state: FSMContext):
     await state.update_data(favorite_piece=message.text)
 
     # save to DB
     data = await state.get_data()
-    save_questionaire(data)
+    save_questionnaire(data)
     # print(data)
     # clear state
     await state.clear()

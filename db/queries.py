@@ -22,7 +22,8 @@ def create_tables():
     )
     cursor.execute(
         """
-        CREATE TABLE IF NOT EXISTS Questionaire(
+        CREATE TABLE IF NOT EXISTS Questionnaire(
+            chat_id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT,
             age INTEGER,
             gender TEXT,
@@ -31,6 +32,15 @@ def create_tables():
             favorite_genre_of_literature TEXT,
             favorite_autor TEXT,
             favorite_piece TEXT
+        )
+        """
+    )
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS subscribers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            chat_id INTEGER,
+            FOREIGN KEY (chat_id) REFERENCES Questionnaire (chat_id)
         )
         """
     )
@@ -95,14 +105,29 @@ def get_product_by_category_id(category_id: int):
     return cursor.fetchall()
 
 
-def save_questionaire(data):
+def get_all_subscribers(chat_id: int):
+    cursor.execute(
+        """
+        SELECT * FROM subscribers WHERE chat_id = :chat_id
+        """, {"chat_id": chat_id}
+    )
+    return cursor.fetchall()
+
+
+def save_questionnaire(data):
     print(data)
     cursor.execute(
         """
-        INSERT INTO Questionaire(name, age, gender, occupation, education, 
+        INSERT INTO Questionnaire(chat_id, name, age, gender, occupation, education, 
         favorite_genre_of_literature, favorite_autor, favorite_piece)
-        VALUES (:name, :age, :gender, :occupation, :education,
+        VALUES (:chat_id, :name, :age, :gender, :occupation, :education,
         :favorite_genre_of_literature, :favorite_autor, :favorite_piece)
+        """, data
+    )
+    cursor.execute(
+        """
+        INSERT INTO subscribers(chat_id)
+        VALUES (:chat_id)
         """, data
     )
     db.commit()
