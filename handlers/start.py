@@ -51,3 +51,10 @@ async def about_us(callback: types.CallbackQuery):
                                   "развивающееся книготорговое и издательское предприятие. Книжные магазины фирмы "
                                   "находятся в центральной части столицы Кыргызстана – городе Бишкек.")
 
+
+@start_router.callback_query(F.data == "about")
+async def about_us(callback: types.CallbackQuery):
+    # print(callback.data)
+    await callback.answer()
+    await callback.message.answer("Текст 'О нас'")
+
